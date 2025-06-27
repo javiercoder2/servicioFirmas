@@ -1,0 +1,4 @@
+Flask==2.3.2  # O la versión de Flask que estés usando
+requests==2.31.0 # O la versión de requests que estés usando
+urllib3==2.0.7 # O la versión de urllib3 que estés usando
+gunicorn==21.2.0 # Importante para que Render ejecute tu app en producción

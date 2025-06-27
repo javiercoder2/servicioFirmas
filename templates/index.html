@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firma de SR en SFA y CPQ</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f7f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+            box-sizing: border-box;
+        }
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 1.8em;
+        }
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #34495e;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1em;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        input[type="text"]:focus {
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            outline: none;
+        }
+        .button-group {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        button {
+            padding: 14px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            position: relative; /* Para el spinner */
+            overflow: hidden; /* Para que el spinner no se salga */
+        }
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .btn-sfa {
+            background-color: #27ae60; /* Verde esmeralda */
+        }
+        .btn-sfa:hover:not(:disabled) {
+            background-color: #229954;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .btn-cpq {
+            background-color: #3498db; /* Azul */
+        }
+        .btn-cpq:hover:not(:disabled) {
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+        }
+        .loading-spinner {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        button.loading .loading-spinner {
+            opacity: 1;
+            visibility: visible;
+        }
+        button.loading {
+            color: transparent; /* Oculta el texto del botón mientras carga */
+            pointer-events: none; /* Evita clics adicionales */
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .status-message {
+            margin-top: 25px;
+            padding: 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none; /* Oculto por defecto */
+            animation: fadeIn 0.5s forwards;
+            word-break: break-word; /* Para que los mensajes largos no se salgan */
+        }
+        .status-message.success {
+            background-color: #e6ffee;
+            color: #27ae60;
+            border: 1px solid #27ae60;
+        }
+        .status-message.error {
+            background-color: #ffe6e6;
+            color: #e74c3c;
+            border: 1px solid #e74c3c;
+        }
+        .status-message.warning {
+            background-color: #fffacd;
+            color: #f39c12;
+            border: 1px solid #f39c12;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; display: block; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+                margin: 10px;
+            }
+            h1 {
+                font-size: 1.5em;
+                margin-bottom: 20px;
+            }
+            button {
+                font-size: 1em;
+                padding: 12px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Firma de Documentos de SR</h1>
+        <div class="form-group">
+            <label for="doc_id_input">Ingrese ID de Service Request (SR) / Documento CPQ:</label>
+            <input type="text" id="doc_id_input" placeholder="Ej: 1234567">
+        </div>
+        <div class="button-group">
+            <button id="sign_sfa_sr_button" class="btn-sfa">
+                Firmar SR en SFA
+                <span class="loading-spinner"></span>
+            </button>
+            <button id="sign_cpq_button" class="btn-cpq">
+                Firmar Documento en CPQ
+                <span class="loading-spinner"></span>
+            </button>
+        </div>
+        <div id="status_message" class="status-message"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const docIdInput = document.getElementById('doc_id_input');
+            const signSfaSrButton = document.getElementById('sign_sfa_sr_button');
+            const signCpqButton = document.getElementById('sign_cpq_button');
+            const statusMessageDiv = document.getElementById('status_message');
+
+            // Función para mostrar mensajes de estado
+            function showStatusMessage(message, type) {
+                statusMessageDiv.textContent = message;
+                statusMessageDiv.className = 'status-message ' + type;
+                statusMessageDiv.style.display = 'block';
+            }
+
+            // Función para resetear el botón y el mensaje
+            function resetState(button, originalText) {
+                button.classList.remove('loading');
+                button.disabled = false;
+                button.innerHTML = originalText;
+            }
+
+            // Función para manejar la lógica de firma
+            async function handleSignature(button, endpoint, idValue, originalText) {
+                if (!idValue) {
+                    showStatusMessage('Por favor, ingrese un ID en el campo.', 'warning');
+                    return;
+                }
+
+                button.classList.add('loading');
+                button.disabled = true;
+
+                let payload = {};
+                if (endpoint === '/sign_sfa_sr') {
+                    payload = { sr_id: idValue };
+                } else if (endpoint === '/sign_cpq_doc') {
+                    // Nuevo payload para CPQ
+                    payload = {
+                        "cpq_doc_id": idValue, // Se incluye el ID para el backend
+                        "cus_FirmOK_c": true,
+                        "cus_approved_business_c": true
+                    };
+                }
+
+                try {
+                    const response = await fetch(endpoint, {
+                        method: 'POST', // Ambos endpoints usan POST ahora
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    });
+
+                    const data = await response.json();
+
+                    if (response.ok) {
+                        showStatusMessage(data.message, data.status);
+                    } else {
+                        showStatusMessage(data.message || 'Error desconocido.', 'error');
+                    }
+                } catch (error) {
+                    console.error('Error de red o inesperado:', error);
+                    showStatusMessage('Error de conexión o inesperado. Intente de nuevo más tarde.', 'error');
+                } finally {
+                    resetState(button, originalButtonText);
+                }
+            }
+
+            // Event Listener para el botón "Firmar SR en SFA"
+            signSfaSrButton.addEventListener('click', async function() {
+                const srId = docIdInput.value.trim();
+                const originalButtonText = this.innerHTML;
+                await handleSignature(this, '/sign_sfa_sr', srId, originalButtonText);
+            });
+
+            // Event Listener para el botón "Firmar Documento en CPQ"
+            signCpqButton.addEventListener('click', async function() {
+                const cpqDocId = docIdInput.value.trim();
+                const originalButtonText = this.innerHTML;
+                await handleSignature(this, '/sign_cpq_doc', cpqDocId, originalButtonText);
+            });
+        });
+    </script>
+</body>
+</html>
