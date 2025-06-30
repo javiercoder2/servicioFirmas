@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Firma de Documentos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #000000; /* Fondo negro */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            color: #F8F8F8; /* Texto blanco claro */
+        }
+        .login-container {
+            background-color: #002eff; /* Azul principal */
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Sombra más oscura */
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+            box-sizing: border-box;
+            color: #F8F8F8; /* Texto blanco claro */
+        }
+        .logo {
+            margin-bottom: 30px;
+        }
+        .logo img {
+            max-width: 150px;
+            height: auto;
+            border-radius: 8px; /* Bordes ligeramente redondeados para el logo */
+        }
+        h1 {
+            color: #F8F8F8; /* Blanco claro para el título */
+            margin-bottom: 30px;
+            font-size: 1.8em;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #F8F8F8; /* Blanco claro para las etiquetas */
+            font-weight: bold;
+        }
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.5); /* Borde blanco semi-transparente */
+            border-radius: 8px;
+            font-size: 1em;
+            box-sizing: border-box;
+            background-color: rgba(0, 0, 0, 0.2); /* Fondo de input ligeramente transparente */
+            color: #F8F8F8; /* Texto de input blanco claro */
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #F8F8F8; /* Borde blanco al enfocar */
+            box-shadow: 0 0 0 3px rgba(248, 248, 248, 0.3); /* Sombra de enfoque blanca */
+            outline: none;
+        }
+        button {
+            padding: 14px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            color: #002eff; /* Texto azul sobre fondo blanco */
+            background-color: #F8F8F8; /* Fondo blanco claro */
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 100%; /* Botón de ancho completo */
+        }
+        button:hover {
+            background-color: #E0E0E0; /* Gris claro al pasar el ratón */
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+        .error-message {
+            color: #FF6347; /* Rojo para mensajes de error */
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .login-container {
+                padding: 25px;
+                margin: 10px;
+            }
+            h1 {
+                font-size: 1.5em;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="logo">
+            <img src="https://miportal.entel.cl/static/entelpp/images/logo-entel.png" alt="Logo Entel">
+        </div>
+        <h1>Iniciar Sesión</h1>
+        <form method="POST" action="/login">
+            <div class="form-group">
+                <label for="username">Usuario:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Contraseña:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">Entrar</button>
+        </form>
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>

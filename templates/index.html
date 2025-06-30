@@ -9,25 +9,35 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 20px;
-            background-color: #f4f7f6;
+            background-color: #000000; /* Fondo negro */
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
+            color: #F8F8F8; /* Texto blanco claro */
         }
         .container {
-            background-color: #ffffff;
+            background-color: #002eff; /* Azul principal */
             padding: 40px;
             border-radius: 12px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Sombra más oscura */
             text-align: center;
             width: 100%;
             max-width: 500px;
             box-sizing: border-box;
+            position: relative; /* Para posicionar el botón de logout */
+        }
+        .logo {
+            margin-bottom: 30px;
+        }
+        .logo img {
+            max-width: 150px;
+            height: auto;
+            border-radius: 8px; /* Bordes ligeramente redondeados para el logo */
         }
         h1 {
-            color: #2c3e50;
+            color: #F8F8F8; /* Blanco claro para el título */
             margin-bottom: 30px;
             font-size: 1.8em;
         }
@@ -38,21 +48,23 @@
         label {
             display: block;
             margin-bottom: 8px;
-            color: #34495e;
+            color: #F8F8F8; /* Blanco claro para las etiquetas */
             font-weight: bold;
         }
         input[type="text"] {
             width: 100%;
             padding: 12px;
-            border: 1px solid #ccc;
+            border: 1px solid rgba(255, 255, 255, 0.5); /* Borde blanco semi-transparente */
             border-radius: 8px;
             font-size: 1em;
             box-sizing: border-box;
+            background-color: rgba(0, 0, 0, 0.2); /* Fondo de input ligeramente transparente */
+            color: #F8F8F8; /* Texto de input blanco claro */
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
         input[type="text"]:focus {
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            border-color: #F8F8F8; /* Borde blanco al enfocar */
+            box-shadow: 0 0 0 3px rgba(248, 248, 248, 0.3); /* Sombra de enfoque blanca */
             outline: none;
         }
         .button-group {
@@ -68,9 +80,10 @@
             font-size: 1.1em;
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
-            color: white;
+            color: #002eff; /* Texto azul sobre fondo blanco */
+            background-color: #F8F8F8; /* Fondo blanco claro */
             font-weight: bold;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             position: relative; /* Para el spinner */
             overflow: hidden; /* Para que el spinner no se salga */
         }
@@ -78,30 +91,31 @@
             background-color: #cccccc;
             cursor: not-allowed;
             box-shadow: none;
+            color: #666; /* Color de texto más oscuro para deshabilitado */
         }
         .btn-sfa {
-            background-color: #27ae60; /* Verde esmeralda */
+            /* Colores ya definidos para el esquema, se mantienen */
         }
         .btn-sfa:hover:not(:disabled) {
-            background-color: #229954;
+            background-color: #E0E0E0; /* Gris claro al pasar el ratón */
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         }
         .btn-cpq {
-            background-color: #3498db; /* Azul */
+            /* Colores ya definidos para el esquema, se mantienen */
         }
         .btn-cpq:hover:not(:disabled) {
-            background-color: #2980b9;
+            background-color: #E0E0E0; /* Gris claro al pasar el ratón */
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
         }
         .loading-spinner {
             display: inline-block;
             width: 18px;
             height: 18px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
+            border: 3px solid rgba(0, 0, 0, 0.3); /* Borde oscuro para spinner */
             border-radius: 50%;
-            border-top-color: #fff;
+            border-top-color: #000000; /* Color superior oscuro para spinner */
             animation: spin 1s ease-in-out infinite;
             position: absolute;
             left: 50%;
@@ -130,25 +144,47 @@
             display: none; /* Oculto por defecto */
             animation: fadeIn 0.5s forwards;
             word-break: break-word; /* Para que los mensajes largos no se salgan */
+            background-color: rgba(0, 0, 0, 0.4); /* Fondo semi-transparente oscuro */
+            color: #F8F8F8; /* Texto blanco claro */
+            border: 1px solid rgba(248, 248, 248, 0.3); /* Borde blanco claro */
         }
         .status-message.success {
-            background-color: #e6ffee;
-            color: #27ae60;
-            border: 1px solid #27ae60;
+            background-color: rgba(0, 255, 0, 0.2); /* Verde semi-transparente */
+            color: #F8F8F8;
+            border: 1px solid #00FF00; /* Verde brillante */
         }
         .status-message.error {
-            background-color: #ffe6e6;
-            color: #e74c3c;
-            border: 1px solid #e74c3c;
+            background-color: rgba(255, 0, 0, 0.2); /* Rojo semi-transparente */
+            color: #F8F8F8;
+            border: 1px solid #FF0000; /* Rojo brillante */
         }
         .status-message.warning {
-            background-color: #fffacd;
-            color: #f39c12;
-            border: 1px solid #f39c12;
+            background-color: rgba(255, 255, 0, 0.2); /* Amarillo semi-transparente */
+            color: #F8F8F8;
+            border: 1px solid #FFFF00; /* Amarillo brillante */
         }
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; display: block; }
+        }
+
+        .logout-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            padding: 8px 15px;
+            background-color: #000000; /* Botón de logout negro */
+            color: #F8F8F8; /* Texto blanco claro */
+            border: 1px solid #F8F8F8; /* Borde blanco claro */
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.9em;
+            text-decoration: none;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+        .logout-button:hover {
+            background-color: #333333; /* Gris oscuro al pasar el ratón */
+            border-color: #E0E0E0; /* Gris claro al pasar el ratón */
         }
 
         /* Responsive adjustments */
@@ -165,11 +201,21 @@
                 font-size: 1em;
                 padding: 12px 20px;
             }
+            .logout-button {
+                top: 10px;
+                right: 10px;
+                padding: 6px 12px;
+                font-size: 0.8em;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <a href="/logout" class="logout-button">Cerrar Sesión</a>
+        <div class="logo">
+            <img src="https://miportal.entel.cl/static/entelpp/images/logo-entel.png" alt="Logo Entel">
+        </div>
         <h1>Firma de Documentos de SR</h1>
         <div class="form-group">
             <label for="doc_id_input">Ingrese ID de Service Request (SR) / Documento CPQ:</label>
@@ -177,11 +223,11 @@
         </div>
         <div class="button-group">
             <button id="sign_sfa_sr_button" class="btn-sfa">
-                Firmar SR en SFA
+                Firmar SR en SFA (Primera Firma)
                 <span class="loading-spinner"></span>
             </button>
             <button id="sign_cpq_button" class="btn-cpq">
-                Firmar Documento en CPQ
+                Firmar Documento en CPQ (Segunda Firma)
                 <span class="loading-spinner"></span>
             </button>
         </div>
@@ -223,9 +269,8 @@
                 if (endpoint === '/sign_sfa_sr') {
                     payload = { sr_id: idValue };
                 } else if (endpoint === '/sign_cpq_doc') {
-                    // Nuevo payload para CPQ
                     payload = {
-                        "cpq_doc_id": idValue, // Se incluye el ID para el backend
+                        "cpq_doc_id": idValue,
                         "cus_FirmOK_c": true,
                         "cus_approved_business_c": true
                     };
@@ -233,12 +278,21 @@
 
                 try {
                     const response = await fetch(endpoint, {
-                        method: 'POST', // Ambos endpoints usan POST ahora
+                        method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify(payload)
                     });
+
+                    // Si la respuesta es 401 (No autorizado), redirigir al login
+                    if (response.status === 401) {
+                        showStatusMessage('Sesión expirada o no autorizada. Redirigiendo al login...', 'error');
+                        setTimeout(() => {
+                            window.location.href = '/login';
+                        }, 2000); // Redirige después de 2 segundos
+                        return; // Detener la ejecución
+                    }
 
                     const data = await response.json();
 
@@ -251,7 +305,7 @@
                     console.error('Error de red o inesperado:', error);
                     showStatusMessage('Error de conexión o inesperado. Intente de nuevo más tarde.', 'error');
                 } finally {
-                    resetState(button, originalButtonText);
+                    resetState(button, originalText);
                 }
             }
 

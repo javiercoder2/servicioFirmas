@@ -1,14 +1,23 @@
 import os
 import requests
 import json
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for, session
 import urllib3
 
-# Deshabilita las advertencias SSL para desarrollo/pruebas.
-# ¡IMPORTANTE!: En producción, verifica tus certificados SSL correctamente.
+# Deshabilita las advertencias SSL (¡SOLO PARA DESARROLLO/PRUEBAS!).
+# En un entorno de producción, DEBES configurar la verificación SSL correctamente.
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 app = Flask(__name__)
+
+# Configuración de la clave secreta para las sesiones de Flask.
+# ¡IMPORTANTE!: En producción, genera una clave compleja y almacénala de forma segura
+# (ej. como variable de entorno).
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "una_clave_secreta_muy_segura_y_larga_para_entel_firmas_2024")
+
+# --- Credenciales de Usuario (Hardcodeadas como se solicitó) ---
+VALID_USERNAME = "entel"
+VALID_PASSWORD = "1234"
 
 # --- Configuración de la API: ¡Ahora usa variables de entorno! ---
 # Estas variables deben configurarse en Render.
@@ -33,12 +42,34 @@ if not all([SFA_API_BASE_URL, SFA_USERNAME, SFA_PASSWORD, CPQ_API_BASE_URL, CPQ_
     CPQ_PASSWORD = CPQ_PASSWORD or SFA_PASSWORD
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if username == VALID_USERNAME and password == VALID_PASSWORD:
+            session['logged_in'] = True
+            return redirect(url_for('index'))
+        else:
+            return render_template('login.html', error="Usuario o contraseña incorrectos.")
+    return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session.pop('logged_in', None)
+    return redirect(url_for('login'))
+
 @app.route('/', methods=['GET'])
 def index():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
     return render_template('index.html')
 
 @app.route('/sign_sfa_sr', methods=['POST'])
 def sign_sfa_sr():
+    if not session.get('logged_in'):
+        return jsonify({"status": "error", "message": "No autorizado. Por favor, inicie sesión."}), 401
+
     sr_id = request.json.get('sr_id')
     if not sr_id:
         return jsonify({"status": "error", "message": "El ID de la SR es requerido."}), 400
@@ -98,6 +129,9 @@ def sign_sfa_sr():
 
 @app.route('/sign_cpq_doc', methods=['POST'])
 def sign_cpq_doc():
+    if not session.get('logged_in'):
+        return jsonify({"status": "error", "message": "No autorizado. Por favor, inicie sesión."}), 401
+
     cpq_doc_id = request.json.get('cpq_doc_id')
     if not cpq_doc_id:
         return jsonify({"status": "error", "message": "El ID del documento CPQ es requerido."}), 400
