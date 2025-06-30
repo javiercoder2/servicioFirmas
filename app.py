@@ -93,7 +93,7 @@ def sign_sfa_sr():
         flag_value = response_data.get("cus_FlagSignDocNoCPQ_c", "No disponible en respuesta")
         return jsonify({
             "status": "success",
-            "message": f"SR firmada correctamente en SFA. Valor de cus_FlagSignDocNoCPQ_c: {flag_value}",
+            "message": f"SR firmada correctamente en SFA.",
             "cus_FlagSignDocNoCPQ_c": flag_value
         }), 200
 
@@ -158,7 +158,7 @@ def sign_cpq_doc():
         firm_ok_value = response_data.get("cus_FirmOK_c", "No disponible en respuesta")
         return jsonify({
             "status": "success",
-            "message": f"Documento CPQ '{cpq_doc_id}' enviado correctamente. Valor de cus_FirmOK_c: {firm_ok_value}",
+            "message": f"Documento CPQ '{cpq_doc_id}' enviado correctamente.",
             "cus_FirmOK_c": firm_ok_value
         }), 200
 
